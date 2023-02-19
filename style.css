@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Poppins", sans-serif;
+    position: relative;
+    background-color: #120722;
+    height: 100%;
+  }
+  
+  .pop-up-message {
+    width: 500px;
+    min-height: 250px;
+    position: absolute;
+    border-radius: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    box-shadow: rgba(237, 237, 255, 0.25) 0px 50px 100px -20px,
+      rgba(242, 128, 128, 0.3) 0px 30px 60px -30px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+  }
+  .pop-up-message .iconNo {
+    margin-top: 45px;
+    font-size: 70px;
+    color: red;
+    display: inline-block;
+    text-align: center;
+  }
+  .pop-up-message .checkExict {
+    margin-top: 25px;
+    font-size: 19px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .pop-up-message .actions {
+    float: right;
+    text-align: right;
+    margin: 10px 0;
+  }
+  .pop-up-message .actions i {
+    padding: 2.5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .pop-up-message .actions .edit {
+    color: #2d46b9;
+  }
+  .pop-up-message .actions .delete {
+    color: #bd1616;
+  }
+  .pop-up-message .actions .save {
+    color: #064420;
+  }
+  .pop-up-message p {
+    line-height: 1.4;
+    font-size: 16px;
+  }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(214, 209, 209, 0.5);
+    z-index: 2;
+  }
+  
+  .container {
+    width: 600px;
+    margin: auto;
+    padding: 30px 0;
+    border-radius: 10px;
+  }
+  .container .todo {
+    box-shadow: rgba(255, 254, 254, 0.425) 0px 4px 12px;
+    border-radius: 10px;
+    padding: 10px;
+    /* background-color: #b486f8; */
+  }
+  .container .add-task {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    padding: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  .container .add-task input.addTask {
+    width: 95%;
+    padding: 15px 10px;
+    border: none;
+    background-color: #f6f6f6;
+    outline: none;
+    border-radius: 5px;
+  }
+  .container .add-task .addBtn {
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    font-size: 25px;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    background-color: #b486f8;
+    border-radius: 50%;
+    line-height: 48px;
+    text-align: center;
+    right: 3%;
+    transition: transform 0.4s;
+  }
+  .Filter {
+    display: flex;
+    justify-content: center;
+  }
+  .Filter .addBtn{
+    padding: 10px;
+    margin: 5px 0 5px 0;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: #b486f8;
+    transition: all 0.3s ease;
+  }
+  .Filter .addBtn:hover{
+    font-size: 15px;
+    background-color: #9653f9;
+
+  }
+  .container .add-task .addBtn:hover {
+    transform: rotate(180deg);
+  }
+  .container .list-tasks {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
+  .container .list-tasks .empty-tasks {
+    text-align: center;
+    display: block;
+    font-size: 18px;
+    color: #a3b3c0;
+    font-weight: 700;
+    padding: 25px;
+    user-select: none;
+  }
+  .container .list-tasks .task {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+    background-color: #4a149a7f;
+    border-bottom: 2px solid #ccc;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+  .container .list-tasks .task.finished {
+    /* background-color: rgb(29, 200, 60); */
+    background: linear-gradient(rgb(120, 153, 120), rgb(88, 138, 95));
+  }
+  .container .list-tasks .task.finished p {
+    color: #0d0c0c;
+  }
+  .container .list-tasks .task:hover {
+    background-color: #9491c19c;
+    transition: 0.3s;
+    border-left: 20px solid #4a149a;
+    /* box-shadow: #e90101; */
+    box-shadow: rgba(241, 238, 238, 0.425) 0px 4px 12px;
+
+  }
+  .container .list-tasks .task .actions {
+    position: absolute;
+    right: -15%;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    background-color: red;
+    transition: 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .container .list-tasks .task .actions i {
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    line-height: 45px;
+    transition: 0.3s;
+  }
+  .container .list-tasks .task .actions i:hover {
+    font-size: 19px;
+  }
+  
+  .container .list-tasks .task .actions .deleteBtn {
+    background-color: #ff2442;
+    color: #fff;
+  }
+  .container .list-tasks .task .actions .finishBtn {
+    background-color: #1c7947;
+    color: #fff;
+  }
+  .container .list-tasks .task .actions .not-finishBtn {
+    background-color: #1c7947;
+    color: #fff;
+  }
+  .container .list-tasks .task:hover .actions {
+    right: 0;
+  }
+  .container .list-tasks .task p {
+    max-width: 80%;
+    white-space: nowrap;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  .container .tasks-statis {
+    width: 100%;
+    height: 50px;
+  }
+  .container .tasks-statis > div {
+    width: 50%;
+    padding: 15px;
+    font-size: 15px;
+    user-select: none;
+  }
+  .container .tasks-statis > div span {
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+  .container .tasks-statis .count {
+    float: left;
+    color: #fff;
+  }
+  .container .tasks-statis .count span {
+    background-color: #ff2442;
+  }
+  .container .tasks-statis .completed {
+    float: right;
+    text-align: right;
+    color: #fff;
+
+  }
+  .container .tasks-statis .completed span {
+    background-color: #3db2ff;
+  }
+  .credits p {
+     margin: 15px;
+     padding: 5px;
+    display:flex;
+    color: #fff;
+    font-size: 12px;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+  }
+  .credits p a
+  {
+    text-decoration: none;
+    color: #fff;
+  }
+  .credits p i
+  {
+    color: red;
+    padding: 0 4px 0 4px;
+  }
+
+  @media(max-width:500px)
+  {
+    
+  }
