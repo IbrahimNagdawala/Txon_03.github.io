@@ -1,6 +1,7 @@
 let numTasks = document.querySelector(".all-tasks"),
   numCompletedTasks = document.querySelector(".completed-tasks"),
   btnAddTask = document.querySelector(".addBtn"),
+  //input value
   addTask = document.querySelector(".addTask"),
   emptyMessage = document.querySelector(".empty-tasks"),
   tasksContainer = document.querySelector(".list-tasks"),
@@ -10,19 +11,13 @@ let numTasks = document.querySelector(".all-tasks"),
   notcompleted = document.querySelector(".notcomplete");
 
 
-  
-//   notcompleted.addEventListener('click', ()=>{
-//     console.log('notcompleted clicked');
-//   })
-
- 
-
 window.onload = () => {
   addTask.focus();
 };
 
 const calcNumTasks = () => {
   numTasks.textContent = tasksContainer.getElementsByClassName("task").length;
+
 };
 
 const calcFinishedTasks = () => {
@@ -37,103 +32,127 @@ const checkTasks = () => {
     let text = document.createTextNode("No tasks yet.");
     message.appendChild(text);
     tasksContainer.appendChild(message);
-    return;
-  }
-  document.querySelector(".empty-tasks").remove();
-};
 
-checkTasks();
-calcNumTasks();
+  
+  
+
+    return ;
+  }
+    
+};
+showNotes();
+
 calcFinishedTasks();
 
-btnAddTask.addEventListener("click", addTaskList)
-
-function addTaskList () {
-    let exict = 0;
-    tasks.forEach((task) => {
-      if (task.textContent === addTask.value) {
-        let message = document.createElement("div");
-        message.classList.add("pop-up-message");
-        message.id = "message";
-  
-        let icon = document.createElement("i");
-        icon.classList.add("far", "fa-times-circle", "iconNo");
-  
-        let p = document.createElement("p");
-        p.classList.add("checkExict");
-        let text = document.createTextNode("This task is already exist!!");
-        p.appendChild(text);
-  
-        let overlay = document.createElement("div");
-        overlay.classList.add("overlay");
-        overlay.id = "overlay";
-  
-        message.appendChild(icon);
-        message.appendChild(p);
-  
-        document.body.appendChild(message);
-        document.body.appendChild(overlay);
-        let show = setTimeout(() => {
-          message.remove();
-          overlay.remove();
-        }, 2000);
-        exict = 1;
+btnAddTask.addEventListener("click", (e)=>{
+    let notes = localStorage.getItem("notes");
+    if (notes == null) {
+        notesObj = [];
+      } else {
+        notesObj = JSON.parse(notes);
       }
-  });
-    if (exict === 1 || addTask.value === "") {
-      return addTask.value = "";
-    }
-  
-    let task = document.createElement("div");
-    task.classList.add("task");
-  
-    let p = document.createElement("p");
-    let text = document.createTextNode(addTask.value);
-    p.classList.add("detail");
-    p.appendChild(text);
-  
-    let actions = document.createElement("div");
-    actions.classList.add("actions");
-  
-    let deleteBtn = document.createElement("i");
-    deleteBtn.classList.add("fas", "fa-trash-alt", "deleteBtn");
-  
-    let finishBtn = document.createElement("i");
-    finishBtn.classList.add("fas", "fa-check", "finishBtn");
-  
-    actions.appendChild(finishBtn);
-    actions.appendChild(deleteBtn);
-  
-    task.appendChild(p);
-    task.appendChild(actions);
-    tasksContainer.appendChild(task);
-
-
-    // if (task.classList.contains("finished")) {
-    //     completed.addEventListener('click', ()=>{
-    //         console.log('completed clicked');
-    //         let finishedTaskParent = task.classList.contains("finished")
-    //             tasksContainer.appendChild(finishedTaskParent);
-            
-    //     });
-    // }
-    // else{
-    //     showAllTasks.addEventListener('click', ()=>{
-    //         console.log('all clicked');
-    //     tasksContainer.appendChild(task);
-    
-    //       })
-    // }
-    
-    
-    
-    checkTasks();
-    calcNumTasks();
-  
-    tasks = Array.from(document.querySelectorAll(".task"));
+      let myObj = {
+        Text: addTask.value
+      };
+      notesObj.push(myObj)
+      localStorage.setItem("notes", JSON.stringify(notesObj));
     addTask.value = "";
     
-  };
+      showNotes();
+})
+
+
+function showNotes () {
+//     tasks.forEach((task) => {
+     
+//   });
+   
+
+
+
+    let notes = localStorage.getItem("notes");
+    if (notes == null) {
+        notesObj = [];
+      } else {
+        notesObj = JSON.parse(notes);
+      }
+      
+    let html ="";
+    let exict = 0;
+
+    notesObj.forEach(function (element, index){
+        if (html.textContent === element.Text) {
+            let message = document.createElement("div");
+            message.classList.add("pop-up-message");
+            message.id = "message";
+      
+            let icon = document.createElement("i");
+            icon.classList.add("far", "fa-times-circle", "iconNo");
+      
+            let p = document.createElement("p");
+            p.classList.add("checkExict");
+            let text = document.createTextNode("This task is already exist!!");
+            p.appendChild(text);
+      
+            let overlay = document.createElement("div");
+            overlay.classList.add("overlay");
+            overlay.id = "overlay";
+      
+            message.appendChild(icon);
+            message.appendChild(p);
+      
+            document.body.appendChild(message);
+            document.body.appendChild(overlay);
+            let show = setTimeout(() => {
+              message.remove();
+              overlay.remove();
+            }, 2000);
+            exict = 1;
+          }
+          if (exict === 1 || element.Text === "") {
+            return element.Text = "";
+          }
+     html+= `<div class="task"><p class="detail">${element.Text}</p><div class="actions"><i id="${index}a" class="fas fa-check finishBtn" ></i><i id="${index}" class="fas fa-trash-alt deleteBtn" onclick = "deleteNote(this.id)"></i></div></div>`
+    });
+ 
+    if (notesObj.length != 0) {
+     tasksContainer.innerHTML = html;
+   } else {
+    
+    tasksContainer.innerHTML = `  <span class="empty-tasks">No Tasks Yet</span>`;
+   }
+
+    
+    calcNumTasks();
+    
+};
+
+function deleteNote(index) {
+    let notes = localStorage.getItem("notes");
+    if (notes == null) {
+      notesObj = [];
+    } else {
+      notesObj = JSON.parse(notes);
+    }
+  
+    notesObj.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+
+    let notesfinished = localStorage.getItem("notesfinished");
+    if (notesfinished == null) {
+      notesObj1 = [];
+    } else {
+      notesObj1 = JSON.parse(notesfinished);
+    }
+    
+      notesObj1.splice(index , 1)
+      localStorage.setItem("notesfinished", JSON.stringify(notesObj1));
+
+    showNotes();
+  }
+
+
+
 document.addEventListener("click", (event) => {
   if (
     event.target.className === "task" ||
@@ -154,9 +173,9 @@ document.addEventListener("click", (event) => {
 
     let save = document.createElement("i");
     save.classList.add("fas", "fa-check", "save");
-    actions.appendChild(edit);
-    actions.appendChild(deleteBtn);
-    actions.appendChild(save);
+    // actions.appendChild(edit);
+    // actions.appendChild(deleteBtn);
+    // actions.appendChild(save);
 
     let p = document.createElement("p");
     let text = document.createTextNode(event.target.textContent);
@@ -183,20 +202,38 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("deleteBtn")) {
-    let parent = event.target.parentNode;
-    parent.parentNode.remove();
-    checkTasks();
-  } else if (event.target.classList.contains("finishBtn")) {
+    if (event.target.classList.contains("finishBtn")) {
     let parent = event.target.parentNode;
     parent.parentNode.classList.add("finished");
-    event.target.classList.replace("fa-check", "fa-history");
-    event.target.classList.replace("finishBtn", "not-finishBtn");
-  } else if (event.target.classList.contains("not-finishBtn")) {
+    event.target.remove();
+    // event.target.classList.replace("fa-check", "fa-history");
+    // event.target.classList.replace("finishBtn", "not-finishBtn");
+
+    let notesfinished = localStorage.getItem("notesfinished");
+    if (notesfinished == null) {
+      notesObj1 = [];
+    } else {
+      notesObj1 = JSON.parse(notesfinished);
+    }
+    let myObj1 = {
+        Text: parent.parentNode.textContent
+      };
+      notesObj1.push(myObj1)
+      localStorage.setItem("notesfinished", JSON.stringify(notesObj1));
+
+  } 
+  else if (event.target.classList.contains("not-finishBtn")) {
     let parent = event.target.parentNode;
     parent.parentNode.classList.remove("finished");
     event.target.classList.replace("fa-history", "fa-check");
     event.target.classList.replace("not-finishBtn", "finishBtn");
+
+    let notesfinished = localStorage.getItem("notesfinished");
+    if (notesfinished == null) {
+      notesObj1 = [];
+    } else {
+      notesObj1 = JSON.parse(notesfinished);
+    }
   }
   calcNumTasks();
   calcFinishedTasks();
