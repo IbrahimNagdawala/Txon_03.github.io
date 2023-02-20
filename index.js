@@ -4,11 +4,13 @@ let numTasks = document.querySelector(".all-tasks"),
   //input value
   addTask = document.querySelector(".addTask"),
   emptyMessage = document.querySelector(".empty-tasks"),
+  body = document.getElementsByTagName('body'),
   tasksContainer = document.querySelector(".list-tasks"),
   tasks = Array.from(document.querySelectorAll(".task")),
   showAllTasks = document.querySelector(".allTask"),
   completed = document.querySelector(".complete"),
-  notcompleted = document.querySelector(".notcomplete");
+  notcompleted = document.querySelector(".notcomplete"),
+  details = Array.from(document.getElementsByClassName('detail'));
 
 
 window.onload = () => {
@@ -35,7 +37,7 @@ const checkTasks = () => {
 
   
   
-
+    
     return ;
   }
     
@@ -43,32 +45,103 @@ const checkTasks = () => {
 showNotes();
 
 calcFinishedTasks();
-
 btnAddTask.addEventListener("click", (e)=>{
+  let notes = localStorage.getItem("notes");
+  if (notes == null) {
+      notesObj = [];
+    } else {
+      notesObj = JSON.parse(notes);
+    }
+    if (addTask.value.length!=0 && addTask.value!=e.innerText ) {
+      let myObj = {
+        Text: addTask.value
+      };
+     
+      notesObj.push(myObj)
+
+    }
+  details = Array.from(document.getElementsByClassName('detail'));
+  details.forEach((e)=>{
     let notes = localStorage.getItem("notes");
     if (notes == null) {
         notesObj = [];
       } else {
         notesObj = JSON.parse(notes);
       }
-      let myObj = {
-        Text: addTask.value
-      };
-      notesObj.push(myObj)
-      localStorage.setItem("notes", JSON.stringify(notesObj));
-    addTask.value = "";
-    
-      showNotes();
+      
+      if (addTask.value.length!=0 && addTask.value!=e.innerText ) {
+        let myObj = {
+          Text: addTask.value
+        };
+       
+        notesObj.push(myObj)
+
+      }
+      else if (addTask.value.length===0) {
+        let message = document.createElement("div");
+      message.classList.add("pop-up-message");
+      message.id = "message";
+
+      let icon = document.createElement("i");
+      icon.classList.add("far", "fa-times-circle", "iconNo");
+
+      let p = document.createElement("p");
+      p.classList.add("checkExict");
+      let text = document.createTextNode("Please Enter something");
+      p.appendChild(text);
+
+      let overlay = document.createElement("div");
+      overlay.classList.add("overlay");
+      overlay.id = "overlay";
+
+      message.appendChild(icon);
+      message.appendChild(p);
+
+      document.body.appendChild(message);
+      document.body.appendChild(overlay);
+      let show = setTimeout(() => {
+        message.remove();
+        overlay.remove();
+      }, 2000);
+      }
+
+    if (addTask.value ===e.innerText) {
+      let message = document.createElement("div");
+      message.classList.add("pop-up-message");
+      message.id = "message";
+
+      let icon = document.createElement("i");
+      icon.classList.add("far", "fa-times-circle", "iconNo");
+
+      let p = document.createElement("p");
+      p.classList.add("checkExict");
+      let text = document.createTextNode("This task is already exist!! Please delete if task added");
+      p.appendChild(text);
+
+      let overlay = document.createElement("div");
+      overlay.classList.add("overlay");
+      overlay.id = "overlay";
+
+      message.appendChild(icon);
+      message.appendChild(p);
+
+      document.body.appendChild(message);
+      document.body.appendChild(overlay);
+      let show = setTimeout(() => {
+        message.remove();
+        overlay.remove();
+      }, 2000);
+    }
+   
+  })
+  localStorage.setItem("notes", JSON.stringify(notesObj));  
+  addTask.value = "";
+  showNotes();
 })
 
 
 function showNotes () {
-//     tasks.forEach((task) => {
-     
-//   });
-   
-
-
+  
 
     let notes = localStorage.getItem("notes");
     if (notes == null) {
@@ -78,47 +151,57 @@ function showNotes () {
       }
       
     let html ="";
-    let exict = 0;
+
 
     notesObj.forEach(function (element, index){
-        if (html.textContent === element.Text) {
-            let message = document.createElement("div");
-            message.classList.add("pop-up-message");
-            message.id = "message";
       
-            let icon = document.createElement("i");
-            icon.classList.add("far", "fa-times-circle", "iconNo");
       
-            let p = document.createElement("p");
-            p.classList.add("checkExict");
-            let text = document.createTextNode("This task is already exist!!");
-            p.appendChild(text);
+      let exict = 0;
+      if (element.Text===addTask.value) {
+        let message = document.createElement("div");
+        message.classList.add("pop-up-message");
+        message.id = "message";
+  
+        let icon = document.createElement("i");
+        icon.classList.add("far", "fa-times-circle", "iconNo");
+  
+        let p = document.createElement("p");
+        p.classList.add("checkExict");
+        let text = document.createTextNode("This task is already exist!!");
+        p.appendChild(text);
+  
+        let overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+        overlay.id = "overlay";
+  
+        message.appendChild(icon);
+        message.appendChild(p);
+  
+        document.body.appendChild(message);
+        document.body.appendChild(overlay);
+        let show = setTimeout(() => {
+          message.remove();
+          overlay.remove();
+        }, 2000);
+        exict = 1;
+      }
       
-            let overlay = document.createElement("div");
-            overlay.classList.add("overlay");
-            overlay.id = "overlay";
+      if (exict === 1 || element.Text === "") {
+        return element.Text = "";
+      }
+      html+= `<div class="task"><p class="detail">${element.Text}</p><div class="actions"><i id="${index}a" class="fas fa-check finishBtn" ></i><i id="${index}" class="fas fa-trash-alt deleteBtn" onclick = "deleteNote(this.id)"></i></div></div>`
       
-            message.appendChild(icon);
-            message.appendChild(p);
-      
-            document.body.appendChild(message);
-            document.body.appendChild(overlay);
-            let show = setTimeout(() => {
-              message.remove();
-              overlay.remove();
-            }, 2000);
-            exict = 1;
-          }
-          if (exict === 1 || element.Text === "") {
-            return element.Text = "";
-          }
-     html+= `<div class="task"><p class="detail">${element.Text}</p><div class="actions"><i id="${index}a" class="fas fa-check finishBtn" ></i><i id="${index}" class="fas fa-trash-alt deleteBtn" onclick = "deleteNote(this.id)"></i></div></div>`
+     
     });
  
-    if (notesObj.length != 0) {
+ 
+     
+     if (notesObj.length != 0) {
+      
      tasksContainer.innerHTML = html;
-   } else {
-    
+   } 
+   
+   else {
     tasksContainer.innerHTML = `  <span class="empty-tasks">No Tasks Yet</span>`;
    }
 
