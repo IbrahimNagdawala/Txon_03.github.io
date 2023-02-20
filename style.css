@@ -313,3 +313,35 @@
     }
 
   }
+  @media(max-width:378px){
+    .credits{
+      display: inline-flex;
+      margin-left: 20vw;
+     justify-content: center;
+
+    }
+    .credits p {
+   
+      padding: 5px;
+     display:flex;
+     color: #fff;
+     font-size: 9px;
+    
+    }
+  }
+  @media(max-width:307px){
+    .credits{
+      display: inline-flex;
+      margin-left: 20vw;
+     justify-content: center;
+
+    }
+    .credits p {
+   
+      padding: 5px;
+     display:flex;
+     color: #fff;
+     font-size: 7px;
+    
+    }
+  }
